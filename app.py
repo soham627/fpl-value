@@ -22,7 +22,7 @@ app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///valuation.db'
 
 #new mysql db
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://b763a70febf52d:042b5524@us-cdbr-east-05.cleardb.net/heroku_263f02726821325?reconnect=true"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://b763a70febf52d:042b5524@us-cdbr-east-05.cleardb.net/heroku_263f02726821325"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
