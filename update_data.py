@@ -1,6 +1,6 @@
 from pandas.io.formats.format import TextAdjustment
 from sqlalchemy.sql.sqltypes import Boolean, Float
-from valuation import db
+import db
 import requests 
 import pandas as pd
 pd.options.mode.chained_assignment = None 
