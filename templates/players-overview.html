@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Players Overview
+{% endblock %}
+
+{% block content %} 
+{% if season_started == True %}
+<form method="post">
+    {% if command == 'yes' %} 
+    <button name='please_show' class='btn btn-info' value='no'>Hide low minutes players</button>
+    {% else %}
+<button name='please_show' class='btn btn-info' value='yes'>Show low minutes players</button>
+   
+
+{% endif %}
+</form>
+<table class ="table table-hover" id='players_table'>
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Team</th>
+            <th scope="col">Position</th>
+            <th scope="col">Total Points</th>
+            <th scope="col">Minutes</th>
+            <th scope="col">Price</th>
+            <th scope="col">Points per million</th>
+            <th scope="col">Points per 90</th>
+            <th scope="col">VPM90</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+        <tr>
+            <td>{{player.id}}</td>
+            <td><a href="{{ '/player/%s'%player.id }}">
+                {{player.first_name}} {{player.second_name}}
+            </a>
+                </td>
+            <td>{{player.team}}</td>
+            <td>{{player.position}}</td>
+            <td>{{player.total_points}}</td>
+            <td>{{player.minutes}}</td>
+            <td>{{player.now_cost}}</td>
+            <td>{{player.points_per_mil}}</td>
+            <td>{{player.points_per_90}}</td>
+            <td>{{player.VPM90}}</td>
+            
+        </tr>
+        {% endfor %}
+      
+    </tbody>
+</table>
+{% else %}
+<p>The current season has not yet started.</p>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+ 
+
+$(document).ready(function() {
+    $('#players_table').DataTable( {
+        dom: 'Qlfrtip'
+    });
+    
+});
+  </script>
+{% endblock %}
