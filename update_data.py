@@ -135,5 +135,5 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 })
 
-con = sqlalchemy.create_engine('mysql+pymysql://root:Password627@localhost/fpldb', encoding='utf8')
+con = sqlalchemy.create_engine("mysql+pymysql://b763a70febf52d:042b5524@us-cdbr-east-05.cleardb.net/heroku_263f02726821325", encoding='utf8')
 con.execute('alter table player add primary key(id)')
