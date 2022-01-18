@@ -118,7 +118,7 @@ def my_players():
             graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
             return render_template('my_players.html', team_id=team_id, season_started=season_started, latest_gw=latest_gw, graphJSON=graphJSON)
         except:
-            error_msg = 'Please enter a valid team ID'
+            error_msg = 'Please enter a valid team ID.'
             return render_template('my_players.html', error_msg=error_msg)
     return render_template('my_players.html',season_started=season_started, latest_gw=latest_gw)
 
