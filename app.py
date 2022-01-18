@@ -13,13 +13,15 @@ import plotly.express as px
 from sqlalchemy import Column, Float, Integer, Table, Text
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
+load_dotenv() 
 
 app = Flask(__name__)
 #old sqlite db
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///valuation.db'
 
 #new mysql db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Password627@localhost/fpldb'
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_CONN
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
