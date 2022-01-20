@@ -7,6 +7,11 @@ pd.options.mode.chained_assignment = None
 from sqlalchemy.types import Integer, Text, String, DateTime
 import sqlalchemy
 import os 
+import re
+
+uri = os.environ.get('DATABASE_URL')  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 
 url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 r = requests.get(url)
@@ -136,5 +141,5 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 })
 
-con = sqlalchemy.create_engine(os.environ.get('DATABASE_URL'), encoding='utf8')
+con = sqlalchemy.create_engine(uri, encoding='utf8')
 con.execute('alter table player add primary key(id)')
