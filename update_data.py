@@ -6,6 +6,7 @@ import pandas as pd
 pd.options.mode.chained_assignment = None 
 from sqlalchemy.types import Integer, Text, String, DateTime
 import sqlalchemy
+import os 
 
 url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 r = requests.get(url)
@@ -135,5 +136,5 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 })
 
-con = sqlalchemy.create_engine("mysql+pymysql://b763a70febf52d:042b5524@us-cdbr-east-05.cleardb.net/heroku_263f02726821325", encoding='utf8')
+con = sqlalchemy.create_engine(os.environ.get('DATABASE_URL'), encoding='utf8')
 con.execute('alter table player add primary key(id)')
