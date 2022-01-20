@@ -18,11 +18,9 @@ load_dotenv()
 import os
 
 app = Flask(__name__)
-#old sqlite db
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///valuation.db'
 
-#new mysql db
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://b763a70febf52d:042b5524@us-cdbr-east-05.cleardb.net/heroku_263f02726821325"
+#new  db
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -66,6 +64,8 @@ t_record = Table(
     Column('VPM90', Float)
 )
 
+def create_tables():
+    db.create_all()
 
 @app.route("/")
 @app.route("/home")
