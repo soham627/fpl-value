@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+#from flask_migrate import Migrate
 from dataclasses import asdict
 from ftplib import error_temp
 from select import select
@@ -28,7 +28,7 @@ if uri.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-migrate = Migrate(app,db)
+#migrate = Migrate(app,db)
 
 Base = declarative_base()
 metadata = Base.metadata
