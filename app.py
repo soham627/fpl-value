@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_sslify import SSLify
 #from flask_migrate import Migrate
 from dataclasses import asdict
 from ftplib import error_temp
@@ -20,6 +21,7 @@ import os
 import re
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 #new  db
 uri = os.environ.get('DATABASE_URL')  # or other relevant config var
