@@ -30,7 +30,7 @@ if uri.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-#migrate = Migrate(app,db)
+
 
 Base = declarative_base()
 metadata = Base.metadata
