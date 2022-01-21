@@ -7,92 +7,97 @@
 
 {% block content %}
 <h1>VPM90 Methodology</h1>
-<h2>Motivation</h2>
-<p>
-I started playing <a href="https://fantasy.premierleague.com/">Fantasy Premier League</a> (FPL) in 2018, back when I had no
- idea it would take over my life and every ounce of free time I would ever have. It's a complex game (or so I'd like to think) but the long and short of it is:
- <br> Premier League games take place over the course of the year. At the beginning of each season, hopeless FPL 'managers' (when I refer to <strong>managers</strong>, I mean people like me who sit on the couch and watch these professionals play, and when I refer to <strong>players</strong> I mean football/soccer players who earn millions of pounds to actually <a href="https://www.youtube.com/watch?v=vXrJ6ECUqMU">play the sport</a>) like myself
- choose a squad of 15 players from the Premier League. When those players play games and do well (score goals, assist, keep a clean sheet)
- we get points for their performance. We're given some transfers to use every gameweek to bring in players that we like. There are 38 gameweeks,
- and we are ranked on how many total points we have at the end of gameweek 38.
-<br> When competing against the 8 million+ players across the planet in a game that is subject to a high level of variance from week to week
-(since players can do well one week but suffer a drop in performance the next week for no apparent reason), it is difficult to choose the best players for each gameweek.
-Many managers and organizations have built predictive models using machine learning to predict player performance, but they are all subject to a high rate of error - each player produces only 38 data points per season, so any prediction one makes is subject to a small sample size. 
-Player performance varies over seasons and as players tend to enter and leave the league, it is difficult to find any useful statistical signal.
-<br> However, there are some metrics that have helped me make player decisions such as <a href="expected goals (xG) and expected assists (xA)">expected goals (xG) and expected assists (xA)</a>. 
-<br> Without trying to reinvent the wheel, my goal was to look for a metric that could supplement xG and xA and is particular to FPL.
-</p>
-
-<h2>VPM90</h2>
-<h3>Definition/uses</h3>
-<p>
-    The value that each player brings to my team is primarily a function of how many points they score, and how they are priced in the game.
-    <br>The market element of FPL is what makes the game challenging - we are given a limited budget to select players, who are supposed to be priced
-    according to their FPL value - i.e. star players like Mo Salah, Kevin De Bruyne, and Harry Kane are priced much higher than the others.
-    Player prices change based on how many managers transfer them in and out of their teams, creating somewhat of a market system.
-    <br>I wanted to create a metric that was simple, but still provided me with enough signal to help me make a more informed decision on how much value each player was 
-    bringing to my team - and whether I could identify overvalued or undervalued players. 
-    That's how I (I have not seen this metric elsewhere, but there's a good chance others have used it/come up with similar metrics) came up with <strong>Value per million per 90 (VPM90).</strong>  
-    
-</p>
 <div>
-    $$ VPM90 = \frac{FPL\;points\;scored}{Adjusted\;player\;price}*\frac{90}{Minutes\;played}$$
+    <h2>Motivation</h2>
+    <p>
+        I started playing <a href="https://fantasy.premierleague.com/">Fantasy Premier League</a> (FPL) in 2018, back when I had no
+         idea it would take over my life and every ounce of free time I would ever have. It's a complex game (or so I'd like to think) but the long and short of it is:
+         <br> Premier League games take place over the course of the year. At the beginning of each season, hopeless FPL 'managers' (when I refer to <strong>managers</strong>, I mean people like me who sit on the couch and watch these professionals play, and when I refer to <strong>players</strong> I mean football/soccer players who earn millions of pounds to actually <a href="https://www.youtube.com/watch?v=vXrJ6ECUqMU">play the sport</a>) like myself
+         choose a squad of 15 players from the Premier League. When those players play games and do well (score goals, assist, keep a clean sheet)
+         we get points for their performance. We're given some transfers to use every gameweek to bring in players that we like. There are 38 gameweeks,
+         and we are ranked on how many total points we have at the end of gameweek 38.
+        <br> When competing against the 8 million+ players across the planet in a game that is subject to a high level of variance from week to week
+        (since players can do well one week but suffer a drop in performance the next week for no apparent reason), it is difficult to choose the best players for each gameweek.
+        Many managers and organizations have built predictive models using machine learning to predict player performance, but they are all subject to a high rate of error - each player produces only 38 data points per season, so any prediction one makes is subject to a small sample size. 
+        Player performance varies over seasons and as players tend to enter and leave the league, it is difficult to find any useful statistical signal.
+        <br> However, there are some metrics that have helped me make player decisions such as <a href="expected goals (xG) and expected assists (xA)">expected goals (xG) and expected assists (xA)</a>. 
+        <br> Without trying to reinvent the wheel, my goal was to look for a metric that could supplement xG and xA and is particular to FPL.
+        </p>
 </div>
-<p>
-    VPM90 allows for valuation of Premier League players across two dimensions: price and playing time. 
-    <br> For example, it can help us spot players who are relatively cheap and tend to do well whenever they play. This can be helpful when
-    we are considering players who haven't played many minutes due to injury/rotation (i.e. the coach tends to bench them a lot) but tend to 
-    score points when they are on the field.
-    <br> It can also help us examine players who score a lot of points but are somewhat 'overvalued', in the sense that there are cheaper options who 
-    tend to match/exceed their points output. 
-</p>
 
-<h3>Adjusted player price</h3>
-<p>
-    Lastly, the <i>Adjusted player price</i> used to calculate VPM90 is not the original price of the player. 
-    <br> In FPL, players are separated by their positions (Goalkeeper, Defender, Midfielder, Forward). Each FPL team needs to have 2 Goalkeepers, 5 Defenders, 5 Midfielders, and 3 Forwards.
-    At the start of each season, the lowest price for the 'worst' (though some players at these low prices are often underpriced and are eventually considered to be steals) Goalkeepers/Defenders/Forwards is £4.0 million, while the lowest priced Midfielders are valued at £4.5m.
-      Since VPM90 is a metric that measures a tradeoff between price and points scored, I felt it appropriate to adjust the player prices to take this into account - 
-      since managers have to spend that extra £0.5m on a midfielder anyway, a measure of value should measure the value gained for each £million <strong>over the minimum price for that position</strong>. 
-    <br>This means that Midfielders actually provide slightly more 'value' than their price suggests. For example, if we have a Midfielder and Forward that are both priced at 
-    £7.0m and have scored the same number of points in the same number of minutes, the Midfielder is providing more value (since we have only spent an incremental £2.5m on him compared to an incremental £3.0m spent on the Forward). 
-    <br> Caveat: this minimum price can drop over time if the lowest-priced players experience a drop in price. Here are the current lowest-priced players by position:
-    <table>
-        <tr>
-            <th>Position</th>
-            <th>Lowest price</th>
-        </tr>
-        <tr>
-            <td>Goalkeeper</td>
-            <td>£{{lowest_gkp.now_cost}}m</td>
-        </tr>
-        <tr>
-            <td>Defender</td>
-            <td>£{{lowest_def.now_cost}}m</td>
-        </tr>
-        <tr>
-            <td>Midfielder</td>
-            <td>£{{lowest_mid.now_cost}}m</td>
-        </tr>
-        <tr>
-            <td>Forward</td>
-            <td>£{{lowest_fwd.now_cost}}m</td>
-        </tr>
+<div>
+    <h2>VPM90</h2>
+    <h3>Definition/uses</h3>
+    <p>
+        The value that each player brings to my team is primarily a function of how many points they score, and how they are priced in the game.
+        <br>The market element of FPL is what makes the game challenging - we are given a limited budget to select players, who are supposed to be priced
+        according to their FPL value - i.e. star players like Mo Salah, Kevin De Bruyne, and Harry Kane are priced much higher than the others.
+        Player prices change based on how many managers transfer them in and out of their teams, creating somewhat of a market system.
+        <br>I wanted to create a metric that was simple, but still provided me with enough signal to help me make a more informed decision on how much value each player was 
+        bringing to my team - and whether I could identify overvalued or undervalued players. 
+        That's how I (I have not seen this metric elsewhere, but there's a good chance others have used it/come up with similar metrics) came up with <strong>Value per million per 90 (VPM90).</strong>  
         
-    </table>
-    <br>
-     Consequently, <i>Adjusted player price = Player price - Lowest price for that position*</i>  
-     <br> * If <i>Player price = Lowest price for that position</i>, i.e. the player in question is the lowest-priced for his position,
-     <br>
-     <i>Adjusted player price = £0.1m</i> since an adjusted price of £0m would prevent calculation of VPM90. 
-</p>
-<h3>Weighted VPM90</h3>
-<p>
-    The <a href='/player_comp_form'>player comparison graphs </a> measure weighted VPM90. VPM90 is calculated for each game, and then is weighted with the VPM90 of all the previous
-    gameweeks of that season (weightage is based on minutes played). So if a player has a VPM90 of 2.0 in week 1 after playing 80 minutes, and then a VPM90 of 1.0 in week 2
-    after playing 40 minutes, the cumulative VPM90 for week 2 will be:
-    $$ 2.0*\frac{80}{40+80} + 1.0*\frac{40}{40+80} \approx 1.667$$
-</p>
+    </p>
+    <div>
+        $$ VPM90 = \frac{FPL\;points\;scored}{Adjusted\;player\;price}*\frac{90}{Minutes\;played}$$
+    </div>
+    <p>
+        VPM90 allows for valuation of Premier League players across two dimensions: price and playing time. 
+        <br> For example, it can help us spot players who are relatively cheap and tend to do well whenever they play. This can be helpful when
+        we are considering players who haven't played many minutes due to injury/rotation (i.e. the coach tends to bench them a lot) but tend to 
+        score points when they are on the field.
+        <br> It can also help us examine players who score a lot of points but are somewhat 'overvalued', in the sense that there are cheaper options who 
+        tend to match/exceed their points output. 
+    </p>
+    
+    <h3>Adjusted player price</h3>
+    <p>
+        Lastly, the <i>Adjusted player price</i> used to calculate VPM90 is not the original price of the player. 
+        <br> In FPL, players are separated by their positions (Goalkeeper, Defender, Midfielder, Forward). Each FPL team needs to have 2 Goalkeepers, 5 Defenders, 5 Midfielders, and 3 Forwards.
+        At the start of each season, the lowest price for the 'worst' (though some players at these low prices are often underpriced and are eventually considered to be steals) Goalkeepers/Defenders/Forwards is £4.0 million, while the lowest priced Midfielders are valued at £4.5m.
+          Since VPM90 is a metric that measures a tradeoff between price and points scored, I felt it appropriate to adjust the player prices to take this into account - 
+          since managers have to spend that extra £0.5m on a midfielder anyway, a measure of value should measure the value gained for each £million <strong>over the minimum price for that position</strong>. 
+        <br>This means that Midfielders actually provide slightly more 'value' than their price suggests. For example, if we have a Midfielder and Forward that are both priced at 
+        £7.0m and have scored the same number of points in the same number of minutes, the Midfielder is providing more value (since we have only spent an incremental £2.5m on him compared to an incremental £3.0m spent on the Forward). 
+        <br> Caveat: this minimum price can drop over time if the lowest-priced players experience a drop in price. Here are the current lowest-priced players by position:
+        <table>
+            <tr>
+                <th>Position</th>
+                <th>Lowest price</th>
+            </tr>
+            <tr>
+                <td>Goalkeeper</td>
+                <td>£{{lowest_gkp.now_cost}}m</td>
+            </tr>
+            <tr>
+                <td>Defender</td>
+                <td>£{{lowest_def.now_cost}}m</td>
+            </tr>
+            <tr>
+                <td>Midfielder</td>
+                <td>£{{lowest_mid.now_cost}}m</td>
+            </tr>
+            <tr>
+                <td>Forward</td>
+                <td>£{{lowest_fwd.now_cost}}m</td>
+            </tr>
+            
+        </table>
+        <br>
+         Consequently, <i>Adjusted player price = Player price - Lowest price for that position*</i>  
+         <br> * If <i>Player price = Lowest price for that position</i>, i.e. the player in question is the lowest-priced for his position,
+         <br>
+         <i>Adjusted player price = £0.1m</i> since an adjusted price of £0m would prevent calculation of VPM90. 
+    </p>
+    <h3>Weighted VPM90</h3>
+    <p>
+        The <a href='/player_comp_form'>player comparison graphs </a> measure weighted VPM90. VPM90 is calculated for each game, and then is weighted with the VPM90 of all the previous
+        gameweeks of that season (weightage is based on minutes played). So if a player has a VPM90 of 2.0 in week 1 after playing 80 minutes, and then a VPM90 of 1.0 in week 2
+        after playing 40 minutes, the cumulative VPM90 for week 2 will be:
+        $$ 2.0*\frac{80}{40+80} + 1.0*\frac{40}{40+80} \approx 1.667$$
+    </p>
+</div>
+
 
 
 {% endblock %}
