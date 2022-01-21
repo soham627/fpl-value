@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_sslify import SSLify
-#from flask_migrate import Migrate
 from dataclasses import asdict
 from ftplib import error_temp
 from select import select
