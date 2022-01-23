@@ -21,7 +21,8 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai&display=swap" rel="stylesheet">
-      
+      <!-- favicon -->
+      <link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}">
       {% block headscripts %} 
       {% endblock %}
       <title>
@@ -32,7 +33,10 @@
    </head>
    <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">FPL Value</a>
+        <a class="navbar-brand" href="/">
+          <img src="{{ url_for('static', filename='fp_main_logo.png') }}" width="150" alt="" class="d-inline-block align-middle mr-2">
+
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
