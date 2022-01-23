@@ -1,3 +1,5 @@
+from unicodedata import decimal
+from attr import asdict
 from pandas.io.formats.format import TextAdjustment
 from sqlalchemy.sql.sqltypes import Boolean, Float
 from app import db
@@ -90,15 +92,37 @@ def calculate_vpm90(df):
 players_who_played = elements_df.loc[elements_df.minutes>0]
 player_records_df = pd.DataFrame()
 latest_vpm90_df = pd.DataFrame()
+last_3_df= pd.DataFrame(columns=['p_element','ppg3','ppm3','pp90_3','vpm90_3'])
+##add later if it works 
+#last_6_df= pd.DataFrame(columns=['element','ppg6','ppm6','pp90_6','vpm90_6'])
+#last_10_df= pd.DataFrame(columns=['element','ppg10','ppm10','pp90_10','vpm90_10'])
+
 for i in players_who_played.id:
     url = 'https://fantasy.premierleague.com/api/element-summary/{playerid}/'.format(playerid = i)
     r = requests.get(url)
-    json = r.json()
-    player_df = pd.DataFrame(json['history'])
+    p_json = r.json()
+    player_df = pd.DataFrame(p_json['history'])
     player_df['value'] = player_df['value']/10
     player_df['VPM90']= calculate_vpm90(player_df)
     player_df['VPM90']= player_df['VPM90'].round(decimals=1)
     latest_vpm90_df = latest_vpm90_df.append(player_df[['element','VPM90']].iloc[-1])
+    
+    last_3 = player_df[['element','total_points','minutes','value']].tail(3).reset_index()
+    last_3['VPM90_3'] = calculate_vpm90(last_3)
+    vpm90_3 = round(last_3['VPM90_3'].iloc[-1],1)
+    if last_3['minutes'].sum() == 0:
+        ppg3 = 0
+        ppm3 = 0
+        pp90_3 = 0
+    else:
+        ppg3 = round(last_3['total_points'].sum()/last_3['minutes'].gt(0).sum(),1)
+        ppm3 = round(((1/3)* last_3['total_points']/last_3['value']).sum(),1)
+        pp90_3 = round(last_3['total_points'].sum()*90/last_3['minutes'].sum(),1)
+    p_element = last_3['element'].iloc[0]
+    df3_to_add = {'p_element': p_element, 'ppg3': ppg3, 'ppm3': ppm3,'pp90_3':pp90_3,'vpm90_3':vpm90_3}
+    last_3_df = last_3_df.append(df3_to_add,ignore_index=True)
+
+
     player_df['first_name'] = player_df.element.map(elements_df.set_index('id').first_name)
     player_df['second_name'] = player_df.element.map(elements_df.set_index('id').second_name)
     focused_df = player_df[['first_name', 'second_name','element', 'fixture', 'opponent_team', 'total_points', 'was_home', 'kickoff_time', 'round', 'minutes','goals_scored', 'assists','value','VPM90']]
@@ -106,6 +130,7 @@ for i in players_who_played.id:
     
 
 player_overview_df = pd.merge(player_overview_df,latest_vpm90_df,left_on='id', right_on ='element')
+player_overview_df = pd.merge(player_overview_df,last_3_df,left_on='id', right_on ='p_element')
 
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
     "id": Integer,
@@ -120,7 +145,12 @@ player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='
     'points_per_90': Float,
     'points_per_mil': Float,
     'element': Integer,
-    'VPM90': Float
+    'VPM90': Float,
+    'ppg3': Float,
+    'ppm3': Float,
+    'pp90_3': Float,
+    'vpm90_3': Float
+    
 
 })
 

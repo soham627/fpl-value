@@ -51,6 +51,10 @@ class Player(Base):
     points_per_mil = Column(Float)
     element = Column(Integer)
     VPM90 = Column(Float)
+    ppg3= Column(Float)
+    ppm3= Column(Float)
+    pp90_3= Column(Float)
+    vpm90_3= Column(Float)
 
 
 t_record = Table(
