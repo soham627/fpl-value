@@ -12,6 +12,18 @@ Your Team
         <input type="text" name='team_id' id='team_id' placeholder="eg. 380968">
         <input class="btn btn-primary" type="submit" value="Analyze my team">
     </form>
+    <div class='mw-75'>
+        To find your FPL team ID:
+        <ol>
+            <li>Log into <a href="https://fantasy.premierleague.com/" target="_blank">FPL</a> in a web browser</li>
+            <li>Navigate to the 'Points' tab</li>
+            <li>The URL of the page should read something like this:
+                "https://fantasy.premierleague.com/entry/<strong>1234567</strong>/event/23"
+                <br>
+                That number is your team ID!
+            </li>
+        </ol>
+    </div>
 </div>
 {% if error_msg %} 
 <div class="alert alert-danger" role="alert">{{error_msg}}</div>
