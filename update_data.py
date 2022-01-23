@@ -27,8 +27,8 @@ player_overview_df['team'] = player_overview_df.team.map(teams_df.set_index('id'
 player_overview_df['now_cost']=player_overview_df['now_cost']/10
 
 
-player_overview_df['points_per_90']= player_overview_df['total_points']*90/player_overview_df['minutes']
-player_overview_df['points_per_mil'] = player_overview_df['total_points']/player_overview_df['now_cost']
+player_overview_df['points_per_90']= (player_overview_df['total_points']*90/player_overview_df['minutes']).round(decimals=1)
+player_overview_df['points_per_mil'] = (player_overview_df['total_points']/player_overview_df['now_cost']).round(decimals=1)
 
 ##rearranging columns for readability
 player_overview_df = player_overview_df.drop(['element_type'], axis=1)
@@ -97,6 +97,7 @@ for i in players_who_played.id:
     player_df = pd.DataFrame(json['history'])
     player_df['value'] = player_df['value']/10
     player_df['VPM90']= calculate_vpm90(player_df)
+    player_df['VPM90']= player_df['VPM90'].round(decimals=1)
     latest_vpm90_df = latest_vpm90_df.append(player_df[['element','VPM90']].iloc[-1])
     player_df['first_name'] = player_df.element.map(elements_df.set_index('id').first_name)
     player_df['second_name'] = player_df.element.map(elements_df.set_index('id').second_name)
