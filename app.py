@@ -135,7 +135,9 @@ def player_comparison():
     })
     fig.update_xaxes(tick0=minwk, dtick=1)
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return render_template('comparison.html',graphJSON=graphJSON, selected_players=selected_players)
+
+    compared_players = Player.query.filter(Player.id.in_(selected_players)).all()
+    return render_template('comparison.html',graphJSON=graphJSON, selected_players=selected_players, compared_players=compared_players)
 
 @app.route('/player_comp_form')
 def comp_form():
