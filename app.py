@@ -55,6 +55,14 @@ class Player(Base):
     ppm3= Column(Float)
     pp90_3= Column(Float)
     vpm90_3= Column(Float)
+    ppg6= Column(Float)
+    ppm6= Column(Float)
+    pp90_6= Column(Float)
+    vpm90_6= Column(Float)
+    ppg10= Column(Float)
+    ppm10= Column(Float)
+    pp90_10= Column(Float)
+    vpm90_10= Column(Float)
 
 
 t_record = Table(
