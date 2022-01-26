@@ -55,14 +55,20 @@ class Player(Base):
     ppm3= Column(Float)
     pp90_3= Column(Float)
     vpm90_3= Column(Float)
+    pts3= Column(Integer)
+    min3= Column(Integer)
     ppg6= Column(Float)
     ppm6= Column(Float)
     pp90_6= Column(Float)
     vpm90_6= Column(Float)
+    pts6= Column(Integer)
+    min6= Column(Integer)
     ppg10= Column(Float)
     ppm10= Column(Float)
     pp90_10= Column(Float)
     vpm90_10= Column(Float)
+    pts10= Column(Integer)
+    min10= Column(Integer)
 
 
 t_record = Table(
@@ -103,14 +109,26 @@ def all_players():
     if math.isnan(events_df.iloc[0].most_captained) == True:
         season_started = False
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
+    show_last = request.form.get('week_filter')
 
-    minutes_threshold = 0.2*90*latest_gw
-    players = Player.query.filter(Player.minutes >= minutes_threshold).all()
+    if show_last== 'a':
+        minutes_threshold = 90
+        players = Player.query.filter(Player.min3 >= minutes_threshold).all()
+    elif show_last == 'b':
+        minutes_threshold = 270
+        players = Player.query.filter(Player.min6 >= minutes_threshold).all()
+    elif show_last == 'c':
+        minutes_threshold = 450
+        players = Player.query.filter(Player.min10 >= minutes_threshold).all()
+    else:
+        minutes_threshold = 0.2*90*latest_gw
+        players = Player.query.filter(Player.minutes >= minutes_threshold).all()
     command = request.form.get('please_show')
     if command == 'yes':
         players = Player.query.all()
+
     
-    return render_template('players-overview.html', players=players, command=command, season_started=season_started)
+    return render_template('players-overview.html', players=players, command=command, season_started=season_started, show_last=show_last)
 
 @app.route('/player_comparison', methods=['POST'])
 def player_comparison():

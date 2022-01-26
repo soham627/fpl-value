@@ -6,16 +6,69 @@
 
 {% block content %} 
 {% if season_started == True %}
-<form method="post">
-    {% if command == 'yes' %} 
-    <button name='please_show' class='btn btn-info' value='no'>Hide low minutes players</button>
-    {% else %}
-<button name='please_show' class='btn btn-info' value='yes'>Show low minutes players</button>
-   
-
-{% endif %}
+<div class='container mw-97'>
+    <div class='text-center mt-2'>
+        <h3>Player Table 
+            {% if show_last =='a' %} 
+                (Last 3 Gameweeks)
+            {% elif show_last =='b' %}
+                (Last 6 Gameweeks)
+            {% elif show_last =='c' %}
+                (Last 10 Gameweeks)
+            {% else %}
+            (Full season)
+            {% endif %}
+        </h3>
+    </div>
+<div class='mt-1'>
+    <form method="post">
+        {% if command == 'yes' %} 
+        <button name='please_show' class='btn btn-info' value='no'>Hide low minutes players</button>
+        {% else %}
+    <button name='please_show' class='btn btn-info' value='yes'>Show low minutes players</button>
 </form>
+ 
+</div>
+  
+
+    <form method="post">
+        <label for="week_filter">Filter by gameweek range:</label>
+        <select name='week_filter' id='week_filter'>
+            {% if show_last =='a' %} 
+            <option value='d'>Full season</option>
+            <option value='a' selected>Last 3 gameweeks</option>
+            <option value='b'>Last 6 gameweeks</option>
+            <option value='c'>Last 10 gameweeks</option>
+        {% elif show_last =='b' %}
+        <option value='d'>Full season</option>
+        <option value='a'>Last 3 gameweeks</option>
+        <option value='b' selected>Last 6 gameweeks</option>
+        <option value='c'>Last 10 gameweeks</option>
+        {% elif show_last =='c' %}
+        <option value='d'>Full season</option>
+        <option value='a'>Last 3 gameweeks</option>
+        <option value='b'>Last 6 gameweeks</option>
+        <option value='c' selected>Last 10 gameweeks</option>
+        {% else %}
+        <option value='d' selected>Full season</option>
+            <option value='a'>Last 3 gameweeks</option>
+            <option value='b'>Last 6 gameweeks</option>
+            <option value='c'>Last 10 gameweeks</option>
+        
+        {% endif %}
+        </select>
+        <input class="btn btn-primary" type="submit">
+    </form>
+    
+        
+
+ 
+  
+{% endif %}
+
+
 <table class ="table table-hover" id='players_table'>
+    
     <thead>
         <tr>
             <th scope="col">Name</th>
@@ -28,7 +81,7 @@
             <th scope="col">Points per million</th>
             <th scope="col">Points per 90</th>
             <th scope="col">VPM90</th>
-            <th scope="col">VPM90_10</th>
+    
         </tr>
     </thead>
     <tbody>
@@ -40,14 +93,45 @@
                 </td>
             <td>{{player.team}}</td>
             <td>{{player.position}}</td>
-            <td>{{player.total_points}}</td>
-            <td>{{player.minutes}}</td>
-            <td>{{player.now_cost}}</td>
-            <td>{{player.points_per_game}}</td>
-            <td>{{player.points_per_mil}}</td>
-            <td>{{player.points_per_90}}</td>
-            <td>{{player.VPM90}}</td>
-            <td>{{player.vpm90_10}}</td>
+        
+        {% if show_last == 'a' %} 
+        <td>{{player.pts3}}</td>
+        <td>{{player.min3}}</td>
+        <td>{{player.now_cost}}</td>
+        <td>{{player.ppg3}}</td>
+        <td>{{player.ppm3}}</td>
+        <td>{{player.pp90_3}}</td>
+        <td>{{player.vpm90_3}}</td>
+
+        {% elif show_last == 'b' %} 
+        <td>{{player.pts6}}</td>
+        <td>{{player.min6}}</td>
+        <td>{{player.now_cost}}</td>
+        <td>{{player.ppg6}}</td>
+        <td>{{player.ppm6}}</td>
+        <td>{{player.pp90_6}}</td>
+        <td>{{player.vpm90_6}}</td>
+
+        {% elif show_last == 'c' %} 
+        <td>{{player.pts10}}</td>
+        <td>{{player.min10}}</td>
+        <td>{{player.now_cost}}</td>
+        <td>{{player.ppg10}}</td>
+        <td>{{player.ppm10}}</td>
+        <td>{{player.pp90_10}}</td>
+        <td>{{player.vpm90_10}}</td>
+
+        {% else %}
+        <td>{{player.total_points}}</td>
+        <td>{{player.minutes}}</td>
+        <td>{{player.now_cost}}</td>
+        <td>{{player.points_per_game}}</td>
+        <td>{{player.points_per_mil}}</td>
+        <td>{{player.points_per_90}}</td>
+        <td>{{player.VPM90}}</td>
+        {% endif %}
+           
+      
            
             
         </tr>
@@ -55,6 +139,7 @@
       
     </tbody>
 </table>
+</div>
 {% else %}
 <p>The current season has not yet started.</p>
 {% endif %}
@@ -66,7 +151,8 @@
 $(document).ready(function() {
     $('#players_table').DataTable( {
         dom: 'Qlfrtip',
-        order: [[8, 'desc']]
+        order: [[8, 'desc']],
+        caption: 'hello'
     });
     
 });

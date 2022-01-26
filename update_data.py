@@ -92,10 +92,10 @@ def calculate_vpm90(df):
 players_who_played = elements_df.loc[elements_df.minutes>0]
 player_records_df = pd.DataFrame()
 latest_vpm90_df = pd.DataFrame()
-last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3'])
+last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3','pts3','min3'])
 ##add later if it works 
-last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6'])
-last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10'])
+last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6','pts6','min6'])
+last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10','pts10','min10'])
 
 for i in players_who_played.id:
     url = 'https://fantasy.premierleague.com/api/element-summary/{playerid}/'.format(playerid = i)
@@ -122,7 +122,9 @@ for i in players_who_played.id:
             ppmx = round(((1/n)* last_x['total_points']/last_x['value']).sum(),1)
             pp90_x = round(last_x['total_points'].sum()*90/last_x['minutes'].sum(),1)
         p_element = last_x['element'].iloc[0]
-        dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x}
+        min_x = last_x['minutes'].sum()
+        pts_x = last_x['total_points'].sum()
+        dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x, f'pts{n}':pts_x, f'min{n}': min_x}
         final_df = df.append(dfx_to_add,ignore_index=True)
         
         return final_df
@@ -165,14 +167,20 @@ player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='
     'ppm3': Float,
     'pp90_3': Float,
     'vpm90_3': Float,
+    'pts3': Integer,
+    'min3': Integer,
     'ppg6': Float,
     'ppm6': Float,
     'pp90_6': Float,
     'vpm90_6': Float,
+    'pts6': Integer,
+    'min6': Integer,
     'ppg10': Float,
     'ppm10': Float,
     'pp90_10': Float,
-    'vpm90_10': Float
+    'vpm90_10': Float,
+    'pts10': Integer,
+    'min10': Integer
 })
 
 player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='replace', dtype={
