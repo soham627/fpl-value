@@ -231,5 +231,9 @@ def method_page():
     lowest_fwd = Player.query.filter(Player.position=='FWD').order_by(Player.now_cost).first()
     return render_template('methodology.html',lowest_gkp=lowest_gkp, lowest_def=lowest_def,lowest_mid=lowest_mid,lowest_fwd=lowest_fwd)
 
+@app.route('/insights')
+def insights_page():
+    return render_template('insights.html')
+
 if __name__ == '__main__':
     app.run(debug=True) 

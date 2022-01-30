@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+
+{% block title %}
+Insights
+{% endblock %}
+
+{% block content %} 
+<div id="retainable-rss-embed" data-rss="https://medium.com/feed/@fplvalue"
+data-maxcols="3" 
+data-layout="grid" 
+data-poststyle="inline" 
+data-readmore="Read the rest" 
+data-buttonclass="btn btn-primary" 
+data-offset="-100">
+{% endblock %} 
+
+{% block scripts %} 
+<script src="https://www.twilik.com/assets/retainable/rss-embed/retainable-rss-embed.js"></script>
+{% endblock %}
