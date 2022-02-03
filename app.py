@@ -141,8 +141,8 @@ def player_comparison():
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     
 
-    maxwk = request.form.get('maxwk')
-    minwk = request.form.get('minwk')
+    maxwk = int(request.form.get('maxwk'))
+    minwk = int(request.form.get('minwk'))
   
     if maxwk < minwk:
         error_statement = "Initial gameweek value must be lower than final gameweek value"

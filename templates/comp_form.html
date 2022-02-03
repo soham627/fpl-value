@@ -36,9 +36,9 @@ Compare Players
           {% for i in range(1,latest_gw + 1)%} 
 
           {% if i == latest_gw %}
-          <option value = "{{i}}" selected>{{i}}</option>
+          <option value = {{i}} selected>{{i}}</option>
           {% else %}
-          <option value = "{{i}}">{{i}}</option>
+          <option value = {{i}}>{{i}}</option>
           {% endif %}
           
           {% endfor %}
@@ -46,7 +46,7 @@ Compare Players
    
       <br>
       <input class="btn btn-primary" type="submit" value="Compare">
-
+      
       
     </form>
 </div>
