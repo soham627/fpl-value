@@ -6,35 +6,36 @@
 
 {% block content %} 
 {% if season_started == True %}
-<div class='container mw-97'>
-    <div class='text-center mt-2'>
-        <h3>Player Table 
-            {% if show_last =='a' %} 
-                (Last 3 Gameweeks)
-            {% elif show_last =='b' %}
-                (Last 6 Gameweeks)
-            {% elif show_last =='c' %}
-                (Last 10 Gameweeks)
+    <div class='container mw-97'>
+        <div class='text-center mt-2'>
+            <h3>Player Table 
+                {% if show_last =='a' %} 
+                    (Last 3 Gameweeks)
+                {% elif show_last =='b' %}
+                    (Last 6 Gameweeks)
+                {% elif show_last =='c' %}
+                    (Last 10 Gameweeks)
+                {% else %}
+                (Full season)
+                {% endif %}
+            </h3>
+        </div>
+    <div class='mt-1'>
+        <form method="post">
+            {% if command == 'yes' %} 
+            <button name='please_show' class='btn btn-info' value='no'>Hide low minutes players</button>
             {% else %}
-            (Full season)
-            {% endif %}
-        </h3>
+        <button name='please_show' class='btn btn-info' value='yes'>Show low minutes players</button>
+        {% endif %}
+    </form>
+    
     </div>
-<div class='mt-1'>
-    <form method="post">
-        {% if command == 'yes' %} 
-        <button name='please_show' class='btn btn-info' value='no'>Hide low minutes players</button>
-        {% else %}
-    <button name='please_show' class='btn btn-info' value='yes'>Show low minutes players</button>
-</form>
- 
-</div>
   
 
     <form method="post">
         <label for="week_filter">Filter by gameweek range:</label>
         <select name='week_filter' id='week_filter'>
-            {% if show_last =='a' %} 
+        {% if show_last =='a' %} 
             <option value='d'>Full season</option>
             <option value='a' selected>Last 3 gameweeks</option>
             <option value='b'>Last 6 gameweeks</option>
@@ -63,9 +64,7 @@
         
 
  
-  
-{% endif %}
-
+    <div>
 
 <table class ="table table-hover" id='players_table'>
     
@@ -136,14 +135,18 @@
             
         </tr>
         {% endfor %}
-      
     </tbody>
 </table>
 </div>
+</div>
+
+
 {% else %}
 <p>The current season has not yet started.</p>
 {% endif %}
 {% endblock %}
+
+
 {% block scripts %}
 <script>
  
@@ -151,8 +154,7 @@
 $(document).ready(function() {
     $('#players_table').DataTable( {
         dom: 'Qlfrtip',
-        order: [[8, 'desc']],
-        caption: 'hello'
+        order: [[8, 'desc']]
     });
     
 });
