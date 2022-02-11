@@ -93,7 +93,6 @@ players_who_played = elements_df.loc[elements_df.minutes>0]
 player_records_df = pd.DataFrame()
 latest_vpm90_df = pd.DataFrame()
 last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3','pts3','min3'])
-##add later if it works 
 last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6','pts6','min6'])
 last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10','pts10','min10'])
 
@@ -142,12 +141,21 @@ for i in players_who_played.id:
     focused_df = player_df[['first_name', 'second_name','element', 'fixture', 'opponent_team', 'total_points', 'was_home', 'kickoff_time', 'round', 'minutes','goals_scored', 'assists','value','VPM90']]
     player_records_df = player_records_df.append(focused_df,ignore_index=True)
     
+## creating id for primary key
+player_records_df['id'] = player_records_df.index+1
 
 player_overview_df = pd.merge(player_overview_df,latest_vpm90_df,left_on='id', right_on ='element')
 
 player_overview_df = pd.merge(player_overview_df,last_3_df,left_on='id', right_on ='element_3')
 player_overview_df = pd.merge(player_overview_df,last_6_df,left_on='id', right_on ='element_6')
 player_overview_df = pd.merge(player_overview_df,last_10_df,left_on='id', right_on ='element_10')
+
+teams_2122 = teams_df[['id','name']]
+
+teams_2122.to_sql(name='team2122',con=db.engine, index=False, if_exists='replace',dtype={
+    'id': Integer,
+    'name': Text
+})
 
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
     "id": Integer,
@@ -184,6 +192,7 @@ player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='
 })
 
 player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='replace', dtype={
+    'id': Integer,
     'first_name': Text,
     'second_name': Text,
     'element': Integer,
@@ -203,3 +212,6 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 con = sqlalchemy.create_engine(uri, encoding='utf8')
 con.execute('alter table player add primary key(id)')
+con.execute('alter table team2122 add primary key(id)')
+con.execute('alter table record add primary key(id)')
+con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2122(id)')

@@ -11,7 +11,8 @@ import math
 import pandas as pd
 import plotly
 import plotly.express as px
-from sqlalchemy import Column, Float, Integer, Table, Text
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, Table, Text
+from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
@@ -71,23 +72,33 @@ class Player(Base):
     min10= Column(Integer)
 
 
-t_record = Table(
-    'record', metadata,
-    Column('first_name', Text),
-    Column('second_name', Text),
-    Column('element', Integer),
-    Column('fixture', Integer),
-    Column('opponent_team', Integer),
-    Column('total_points', Integer),
-    Column('was_home', TINYINT(1)),
-    Column('kickoff_time', Text),
-    Column('round', Integer),
-    Column('minutes', Integer),
-    Column('goals_scored', Integer),
-    Column('assists', Integer),
-    Column('value', Float),
-    Column('VPM90', Float)
-)
+class Team(Base):
+    __tablename__ = 'team2122'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    records = relationship("Record", backref= "oppteam")
+
+
+class Record(Base):
+    __tablename__ = 'record'
+
+    id = Column(Integer, primary_key=True)
+    first_name = Column(Text)
+    second_name = Column(Text)
+    element = Column(Integer)
+    fixture = Column(Integer)
+    opponent_team = Column(Integer, ForeignKey('team2122.id'))
+    total_points = Column(Integer)
+    was_home = Column(Boolean)
+    kickoff_time = Column(Text)
+    round = Column(Integer)
+    minutes = Column(Integer)
+    goals_scored = Column(Integer)
+    assists = Column(Integer)
+    value = Column(Float)
+    VPM90 = Column(Float)
+   
 
 def create_tables():
     db.create_all()
@@ -156,8 +167,8 @@ def player_comparison():
         player_select_error = "At least one player must be selected"
         return render_template("comp_form.html", player_select_error = player_select_error, players=players, latest_gw=latest_gw, season_started= season_started)
     df = pd.read_sql_query(
-    sql = db.session.query(t_record.c.first_name, 
-                        t_record.c.second_name,t_record.c.round,t_record.c.VPM90).filter(t_record.c.element.in_(selected_players), t_record.c.round>= minwk, t_record.c.round <= maxwk).statement,
+    sql = db.session.query(Record.first_name, 
+                        Record.second_name,Record.round,Record.VPM90).filter(Record.element.in_(selected_players), Record.round>= minwk, Record.round <= maxwk).statement,
     con = db.engine)
     df['name'] = df['first_name'] + ' ' + df['second_name']
     fig = px.line(df, x="round", y="VPM90", color='name', title = f"Player Comparison (GW{minwk}-{maxwk})", labels={
@@ -201,8 +212,8 @@ def my_players():
             team_name = name_json['name']
 
             df = pd.read_sql_query(
-            sql = db.session.query(t_record.c.first_name, 
-                                t_record.c.second_name,t_record.c.round,t_record.c.VPM90).filter(t_record.c.element.in_(picks)).statement,
+            sql = db.session.query(Record.first_name, 
+                                Record.second_name,Record.round,Record.VPM90).filter(Record.element.in_(picks)).statement,
             con = db.engine)
             df['name'] = df['first_name'] + ' ' + df['second_name']
             fig = px.line(df, x="round", y="VPM90", color='name', title = f"{team_name} VPM90 Overview", labels={
@@ -220,7 +231,7 @@ def my_players():
 
 @app.route('/player/<playerid>')
 def player_page(playerid):
-    this_player = db.session.query(t_record).filter(t_record.c.element== playerid).all()
+    this_player = Record.query.filter(Record.element== playerid).all()
     return render_template('player_profile.html',this_player=this_player)
 
 @app.route('/methodology')
