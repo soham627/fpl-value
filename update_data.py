@@ -150,12 +150,13 @@ player_overview_df = pd.merge(player_overview_df,last_3_df,left_on='id', right_o
 player_overview_df = pd.merge(player_overview_df,last_6_df,left_on='id', right_on ='element_6')
 player_overview_df = pd.merge(player_overview_df,last_10_df,left_on='id', right_on ='element_10')
 
-teams_2122 = teams_df[['id','name']]
+##commenting out 2021-22 teams table since already created 
+""" teams_2122 = teams_df[['id','name']]
 
 teams_2122.to_sql(name='team2122',con=db.engine, index=False, if_exists='replace',dtype={
     'id': Integer,
     'name': Text
-})
+}) """
 
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
     "id": Integer,

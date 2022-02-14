@@ -191,6 +191,19 @@ def comp_form():
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     return render_template('comp_form.html', players=players, latest_gw=latest_gw, season_started= season_started)
 
+@app.route('/regret')
+def regret():
+    players = Player.query.all()
+    return render_template('regret.html', players=players)
+
+@app.route('/regret_results',methods=['POST'])
+def regret_results():
+    und_player = int(request.form.get('und_player'))
+    the_player = Player.query.filter(Player.id == und_player).first()
+    better_players = Player.query.filter(Player.total_points> the_player.total_points, Player.position == the_player.position, Player.points_per_mil>the_player.points_per_mil)
+    return render_template('regret_results.html', the_player=the_player, better_players=better_players)
+
+
 @app.route('/my_players', methods=['POST','GET'])
 def my_players():
     season_started = True

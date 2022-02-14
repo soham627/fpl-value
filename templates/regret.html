@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+
+    <form action="{{ url_for('regret_results') }}" method="post">
+        <label for='id_label_single' class='form-label'>
+            Select a player who you think is underperforming:
+        </label>
+        <select name="und_player" class="js-example-basic-single"  id='id_label_single' style="width: 100%">
+            {% for team in players|groupby('team') %}
+            <optgroup label="{{ team.grouper}}">
+                {% for a_player in team.list %}
+                <option value="{{ a_player.id }}">{{a_player.first_name}} {{a_player.second_name}}</option>
+                {% endfor %}
+            </optgroup>
+            {% endfor %} 
+      </select>
+      <br>
+      <input class="btn btn-primary" type="submit" value="Compare">
+      
+      
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %} 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+        
+        });
+    });
+</script>
+{% endblock %}
