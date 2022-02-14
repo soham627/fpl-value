@@ -213,6 +213,6 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 con = sqlalchemy.create_engine(uri, encoding='utf8')
 con.execute('alter table player add primary key(id)')
-con.execute('alter table team2122 add primary key(id)')
+#con.execute('alter table team2122 add primary key(id)')
 con.execute('alter table record add primary key(id)')
 con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2122(id)')
