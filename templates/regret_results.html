@@ -1,47 +1,184 @@
 {% extends 'base.html' %} 
 
 {% block content %}  
-<p>
-    {{the_player.first_name}} {{the_player.second_name}}
-</p>
+<div class='container mw-97'>
 
-<table class ="table table-hover" id='regret_table'>
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Team</th>
-            <th scope="col">Position</th>
-            <th scope="col">Total Points</th>
-            <th scope="col">Minutes</th>
-            <th scope="col">Price</th>
-            <th scope="col">Points per game</th>
-            <th scope="col">Points per million</th>
-            <th scope="col">Points per 90</th>
-            <th scope="col">VPM90</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for player in better_players %}
-        <tr>
-            <td><a href="{{ '/player/%s'%player.id }}">
-                {{player.first_name}} {{player.second_name}}
-            </a>
-                </td>
-            <td>{{player.team}}</td>
-            <td>{{player.position}}</td>
-            <td>{{player.total_points}}</td>
-            <td>{{player.minutes}}</td>
-            <td>{{player.now_cost}}</td>
-            <td>{{player.points_per_game}}</td>
-            <td>{{player.points_per_mil}}</td>
-            <td>{{player.points_per_90}}</td>
-            <td>{{player.VPM90}}</td>
-            
-        </tr>
-        {% endfor %}
-      
-    </tbody>
-</table>
+    <div class='text-center mt-2'>
+        <h3>Players Who Outperformed {{the_player.first_name}} {{the_player.second_name}}
+            {% if num_weeks =='3' %} 
+                (Last 3 Gameweeks)
+            {% elif num_weeks =='6' %}
+                (Last 6 Gameweeks)
+            {% elif num_weeks =='10' %}
+                (Last 10 Gameweeks)
+            {% else %}
+            (Full season)
+            {% endif %}
+        </h3>
+    </div>
+    <table class ="table table-hover" id='regret_table'>
+        <thead>
+            <tr>
+                <td><a href="{{ '/the_player/%s'%the_player.id }}">
+                    {{the_player.first_name}} {{the_player.second_name}}
+                </a>
+                    </td>
+                <td>{{the_player.team}}</td>
+                <td>{{the_player.position}}</td>
+                {% if num_weeks == 'full' %}
+                <td>{{the_player.total_points}}</td>
+                <td>{{the_player.minutes}}</td>
+                <td>{{the_player.now_cost}}</td>
+                <td>{{the_player.points_per_game}}</td>
+                <td>{{the_player.points_per_mil}}</td>
+                <td>{{the_player.points_per_90}}</td>
+                <td>{{the_player.VPM90}}</td>
+                {% elif num_weeks == '3' %}
+                <td>{{the_player.pts3}}</td>
+                <td>{{the_player.min3}}</td>
+                <td>{{the_player.now_cost}}</td>
+                <td>{{the_player.ppg3}}</td>
+                <td>{{the_player.ppm3}}</td>
+                <td>{{the_player.pp90_3}}</td>
+                <td>{{the_player.vpm90_3}}</td>
+                {% elif num_weeks == '6' %}
+                <td>{{the_player.pts6}}</td>
+                <td>{{the_player.min6}}</td>
+                <td>{{the_player.now_cost}}</td>
+                <td>{{the_player.ppg6}}</td>
+                <td>{{the_player.ppm6}}</td>
+                <td>{{the_player.pp90_6}}</td>
+                <td>{{the_player.vpm90_6}}</td>
+                {% elif num_weeks == '10' %}
+                <td>{{the_player.pts10}}</td>
+                <td>{{the_player.min10}}</td>
+                <td>{{the_player.now_cost}}</td>
+                <td>{{the_player.ppg10}}</td>
+                <td>{{the_player.ppm10}}</td>
+                <td>{{the_player.pp90_10}}</td>
+                <td>{{the_player.vpm90_10}}</td>
+                {% endif %}
+    
+                
+            </tr>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Team</th>
+                <th scope="col">Position</th>
+                <th scope="col">Total Points</th>
+                <th scope="col">Minutes</th>
+                <th scope="col">Price</th>
+                <th scope="col">Points per game</th>
+                <th scope="col">Points per million</th>
+                <th scope="col">Points per 90</th>
+                <th scope="col">VPM90</th>
+            </tr>
+           
+        </thead>
+        <tbody>
+            {% if num_weeks == 'full' %}
+            <tr>
+                <td><a href="{{ '/the_player/%s'%the_player.id }}">
+                    {{the_player.first_name}} {{the_player.second_name}}
+                </a>
+                    </td>
+                <td>{{the_player.team}}</td>
+                <td>{{the_player.position}}</td>
+                <td>{{the_player.total_points}}</td>
+                <td>{{the_player.minutes}}</td>
+                <td>{{the_player.now_cost}}</td>
+                <td>{{the_player.points_per_game}}</td>
+                <td>{{the_player.points_per_mil}}</td>
+                <td>{{the_player.points_per_90}}</td>
+                <td>{{the_player.VPM90}}</td>
+            </tr>
+            {% for player in better_players %}
+            <tr>
+                <td><a href="{{ '/player/%s'%player.id }}">
+                    {{player.first_name}} {{player.second_name}}
+                </a>
+                    </td>
+                <td>{{player.team}}</td>
+                <td>{{player.position}}</td>
+                <td>{{player.total_points}}</td>
+                <td>{{player.minutes}}</td>
+                <td>{{player.now_cost}}</td>
+                <td>{{player.points_per_game}}</td>
+                <td>{{player.points_per_mil}}</td>
+                <td>{{player.points_per_90}}</td>
+                <td>{{player.VPM90}}</td>
+                
+            </tr>
+            {% endfor %}
+    
+    
+            {% elif num_weeks == '3' %} 
+         
+            {% for player in better_players %}
+            <tr>
+                <td><a href="{{ '/player/%s'%player.id }}">
+                    {{player.first_name}} {{player.second_name}}
+                </a>
+                    </td>
+                <td>{{player.team}}</td>
+                <td>{{player.position}}</td>
+                <td>{{player.pts3}}</td>
+                <td>{{player.min3}}</td>
+                <td>{{player.now_cost}}</td>
+                <td>{{player.ppg3}}</td>
+                <td>{{player.ppm3}}</td>
+                <td>{{player.pp90_3}}</td>
+                <td>{{player.vpm90_3}}</td>
+                
+            </tr>
+            {% endfor %}
+    
+            {% elif num_weeks == '6' %} 
+            {% for player in better_players %}
+            <tr>
+                <td><a href="{{ '/player/%s'%player.id }}">
+                    {{player.first_name}} {{player.second_name}}
+                </a>
+                    </td>
+                <td>{{player.team}}</td>
+                <td>{{player.position}}</td>
+                <td>{{player.pts6}}</td>
+                <td>{{player.min6}}</td>
+                <td>{{player.now_cost}}</td>
+                <td>{{player.ppg6}}</td>
+                <td>{{player.ppm6}}</td>
+                <td>{{player.pp90_6}}</td>
+                <td>{{player.vpm90_6}}</td>
+                
+            </tr>
+            {% endfor %}
+    
+            {% elif num_weeks == '10' %} 
+            {% for player in better_players %}
+            <tr>
+                <td><a href="{{ '/player/%s'%player.id }}">
+                    {{player.first_name}} {{player.second_name}}
+                </a>
+                    </td>
+                <td>{{player.team}}</td>
+                <td>{{player.position}}</td>
+                <td>{{player.pts10}}</td>
+                <td>{{player.min10}}</td>
+                <td>{{player.now_cost}}</td>
+                <td>{{player.ppg10}}</td>
+                <td>{{player.ppm10}}</td>
+                <td>{{player.pp90_10}}</td>
+                <td>{{player.vpm90_10}}</td>
+                
+            </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+    </table>
+
+</div>
+
+
 {% endblock %}
 
 {% block scripts %}
@@ -50,7 +187,7 @@
 
 $(document).ready(function() {
     $('#regret_table').DataTable( {
-        order: [[6, 'desc']]
+        order: [[3, 'desc']]
     });
     
 });

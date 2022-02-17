@@ -1,28 +1,94 @@
 {% extends 'base.html' %}
 {% block title %}
-    FPL Value
+FPL Value
 {% endblock %}
 
-{% block content %} 
-<div class='container'>
-    Welcome to FPL Value!
+{% block content %}
+<div class='d-flex justify-content-center pt-2'>
+  <h3>
+    Welcome to FPL Value, a tool for FPL stats, analytics, and insights!
+  </h3>
 </div>
-<div class='container'>
-    <div class='mw-75'>
-        <p>The <a href='/player_comp_form'>core feature</a> of this app is out!</p>
+<div class='container-fluid'>
 
-        <h5>Features coming soon:</h5>
-        <ul>
-            <li>An app that looks nice, subject to whenever I finish learning CSS :) </li>
-            <li>Comparison of Defenders vs Midfielders vs Forwards: what is the optimum formation and which position tends to score the most points?</li>
-            <li>Analysis of the best all-time FPL managers - how many hits do they take, do they generally start strong or make their way to the top over the season?</li>
-            <li>Analysis of VPM90 across seasons - are players' prices adjusted to maintain their value over multiple seasons? Or does the game over/undercorrect?</li>
-        </ul>
-    
+
+    <div class="row justify-content-center pt-4">
+      <div class="col">
+        <div class="card center-card">
+          <div class="card-body">
+            <div class="i2">
+              <i class="fa-solid fa-people-arrows-left-right fa-8x pt-5"></i>
+
+            </div>
+            <h5 class="card-title pt-5" style="font-weight: bold">Player Comparison</h5>
+            <p class="card-text pt-3">Compare FPL player performance based on VPM90, a metric I created to measure player value based on price and performance.</p>
+            <a href="/player_comp_form" class="stretched-link"></a>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card center-card">
+          <div class="card-body">
+            <i class="fa-solid fa-sitemap fa-8x pt-5"></i>
+            <h5 class="card-title pt-5" style="font-weight: bold">Your Team</h5>
+            <p class="card-text pt-3">Enter your FPL team ID and see which players have brought the most value to your team, and which ones are underperforming.</p>
+            <a href="/my_players" class="stretched-link"></a>
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="col">
+        <div class="card center-card">
+          <div class="card-body">
+            <i class="fa-solid fa-heart-crack fa-8x pt-5"></i>
+            <h5 class="card-title pt-5" style="font-weight: bold">REGRET!</h5>
+            <p class="card-text pt-3">Brought in a player who blanked and didn't repay your faith despite holding him for 10 weeks!? 
+              See which similarly priced players have outperformed your pick. 
+              <a href="/regret" class="stretched-link"></a>
+
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card center-card">
+          <div class="card-body">
+            <i class="fa-solid fa-futbol fa-8x pt-5"></i>
+            <h5 class="card-title pt-5" style="font-weight: bold">Insights</h5>
+            <p class="card-text pt-3">Insights from historical FPL data you can use to improve your decision-making. </p>
+            <a href="/insights" class="stretched-link"></a>
+
+          </div>
+        </div>
+      </div>
     </div>
-   
- 
+
 </div>
 
+
+<style>
+ .center-card {
+   margin-left:auto;
+   margin-right:auto;
+   text-align: center;
+   display:block;
+   background-color: #4cd4ca;
+   transition: transform .2s;
+   width: 18rem;
+   height: 30rem;
+}
+
+  .center-card:hover {
+  background-color: #43c4bb;
+  transform: scale(1.15);
+  }
+</style>
 
 {% endblock %}

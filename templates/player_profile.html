@@ -10,11 +10,9 @@
 <table class ="table table-hover" id='profile_table'>
     <thead>
         <tr>
-          
-            <th scope="col">Fixture</th>
-            <th scope="col">Total Points</th>
+            <th scope="col">Gameweek</th>
             <th scope="col">Opponent</th>
-            <th scope="col">Round</th>
+            <th scope="col">Total Points</th>
             <th scope="col">Minutes</th>
             <th scope="col">Goals</th>
             <th scope="col">Assists</th>
@@ -26,11 +24,9 @@
     <tbody>
         {% for one_game in this_player %}
         <tr>
-          
-            <td>{{one_game.fixture}}</td>
-            <td>{{one_game.total_points}}</td>
-            <td>{{one_game.oppteam.name}}</td>
             <td>{{one_game.round}}</td>
+            <td>{{one_game.oppteam.name}}</td>
+            <td>{{one_game.total_points}}</td>
             <td>{{one_game.minutes}}</td>
             <td>{{one_game.goals_scored}}</td>
             <td>{{one_game.assists}}</td>

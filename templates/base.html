@@ -23,6 +23,8 @@
       <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai&display=swap" rel="stylesheet">
       <!-- favicon -->
       <link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}">
+      <!-- font awesome -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
       {% block headscripts %} 
       {% endblock %}
       <title>
@@ -53,11 +55,21 @@
                   <a class="nav-link" href="/my_players">Your Team</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="/regret">REGRET!</a>
+            </li>
+              <li class="nav-item">
                 <a class="nav-link" href="/insights">Insights</a>
             </li>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/methodology">VPM90 Methodology</a>
+            </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+    
+                <a class="fa-brands fa-twitter fa-2x" href="https://twitter.com/value_fpl" target="_blank"></a>
             </li>
             </ul>
             

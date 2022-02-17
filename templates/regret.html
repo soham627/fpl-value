@@ -3,12 +3,19 @@
 
 {% block content %}
 <div class="container">
+    <h1>I Regret Bringing In...</h1>
+    
+    <p>
+        Made a transfer expecting hauls but got only blanks? Feeling like your £12.0m buy has done nothing but let you down? 
+        If you want to look for a replacement (while also wallowing in regret), select the player giving you grief to find similarly priced players
+        who have outperformed your player. 
+    </p>
+
+
 
     <form action="{{ url_for('regret_results') }}" method="post">
-        <label for='id_label_single' class='form-label'>
-            Select a player who you think is underperforming:
-        </label>
-        <select name="und_player" class="js-example-basic-single"  id='id_label_single' style="width: 100%">
+        <select name="und_player" class="js-example-basic-single"  id='id_label_single' style="width: 50%">
+            
             {% for team in players|groupby('team') %}
             <optgroup label="{{ team.grouper}}">
                 {% for a_player in team.list %}
@@ -17,6 +24,19 @@
             </optgroup>
             {% endfor %} 
       </select>
+        
+        <label for='id_label_single' class='form-label'>
+            is causing me great pain
+        </label>
+        
+      <br>
+      <label for="week">Over the</label>
+        <select name='week' id='week'>
+            <option value='full'>entire season</option>
+            <option value= '3'>Last 3 gameweeks</option>
+            <option value= '6'>Last 6 gameweeks</option>
+            <option value= '10'>Last 10 gameweeks</option>
+        </select>
       <br>
       <input class="btn btn-primary" type="submit" value="Compare">
       

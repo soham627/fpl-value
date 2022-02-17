@@ -70,11 +70,12 @@ class Player(Base):
     vpm90_10= Column(Float)
     pts10= Column(Integer)
     min10= Column(Integer)
+    player_records = relationship("Record", backref= "player")
+
 
 
 class Team(Base):
     __tablename__ = 'team2122'
-
     id = Column(Integer, primary_key=True)
     name = Column(Text)
     records = relationship("Record", backref= "oppteam")
@@ -86,7 +87,7 @@ class Record(Base):
     id = Column(Integer, primary_key=True)
     first_name = Column(Text)
     second_name = Column(Text)
-    element = Column(Integer)
+    element = Column(Integer, ForeignKey('player.id'))
     fixture = Column(Integer)
     opponent_team = Column(Integer, ForeignKey('team2122.id'))
     total_points = Column(Integer)
@@ -200,8 +201,16 @@ def regret():
 def regret_results():
     und_player = int(request.form.get('und_player'))
     the_player = Player.query.filter(Player.id == und_player).first()
-    better_players = Player.query.filter(Player.total_points> the_player.total_points, Player.position == the_player.position, Player.points_per_mil>the_player.points_per_mil)
-    return render_template('regret_results.html', the_player=the_player, better_players=better_players)
+    num_weeks = request.form.get('week')
+    if num_weeks == 'full':
+        better_players = Player.query.filter(Player.total_points> the_player.total_points, Player.position == the_player.position, Player.points_per_mil>the_player.points_per_mil, Player.now_cost <= the_player.now_cost)
+    elif num_weeks == '3':
+        better_players = Player.query.filter(Player.pts3> the_player.pts3, Player.position == the_player.position, Player.ppm3>the_player.ppm3, Player.now_cost <= the_player.now_cost)
+    elif num_weeks == '6':
+        better_players = Player.query.filter(Player.pts6> the_player.pts6, Player.position == the_player.position, Player.ppm6>the_player.ppm6, Player.now_cost <= the_player.now_cost)
+    elif num_weeks == '10':
+        better_players = Player.query.filter(Player.pts10> the_player.pts10, Player.position == the_player.position, Player.ppm10>the_player.ppm10, Player.now_cost <= the_player.now_cost)
+    return render_template('regret_results.html', the_player=the_player, num_weeks=num_weeks, better_players=better_players)
 
 
 @app.route('/my_players', methods=['POST','GET'])
