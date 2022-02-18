@@ -158,6 +158,11 @@ teams_2122.to_sql(name='team2122',con=db.engine, index=False, if_exists='replace
     'name': Text
 }) """
 
+con = sqlalchemy.create_engine(uri, encoding='utf8')
+con.execute('alter table record drop constraint teamer')
+con.execute('alter table record drop constraint player_connect')
+
+
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
     "id": Integer,
     'first_name': Text,
@@ -211,7 +216,6 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 })
 
-con = sqlalchemy.create_engine(uri, encoding='utf8')
 con.execute('alter table player add primary key(id)')
 #con.execute('alter table team2122 add primary key(id)')
 con.execute('alter table record add primary key(id)')
