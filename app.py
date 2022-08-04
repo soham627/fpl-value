@@ -75,7 +75,7 @@ class Player(Base):
 
 
 class Team(Base):
-    __tablename__ = 'team2122'
+    __tablename__ = 'team2223'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
     records = relationship("Record", backref= "oppteam")
@@ -89,7 +89,7 @@ class Record(Base):
     second_name = Column(Text)
     element = Column(Integer, ForeignKey('player.id'))
     fixture = Column(Integer)
-    opponent_team = Column(Integer, ForeignKey('team2122.id'))
+    opponent_team = Column(Integer, ForeignKey('team2223.id'))
     total_points = Column(Integer)
     was_home = Column(Boolean)
     kickoff_time = Column(Text)
@@ -118,7 +118,7 @@ def all_players():
     season_started = True
     fpl_json = requests.get('https://fantasy.premierleague.com/api/bootstrap-static/').json()
     events_df = pd.DataFrame(fpl_json['events'])
-    if math.isnan(events_df.iloc[0].most_captained) == True:
+    if events_df.iloc[0].most_captained is None:
         season_started = False
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     show_last = request.form.get('week_filter')
@@ -148,7 +148,7 @@ def player_comparison():
     season_started = True
     fpl_json = requests.get('https://fantasy.premierleague.com/api/bootstrap-static/').json()
     events_df = pd.DataFrame(fpl_json['events'])
-    if math.isnan(events_df.iloc[0].most_captained) == True:
+    if events_df.iloc[0].most_captained is None:
         season_started = False
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     
@@ -187,7 +187,7 @@ def comp_form():
     season_started = True
     fpl_json = requests.get('https://fantasy.premierleague.com/api/bootstrap-static/').json()
     events_df = pd.DataFrame(fpl_json['events'])
-    if math.isnan(events_df.iloc[0].most_captained) == True:
+    if events_df.iloc[0].most_captained is None:
         season_started = False
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     return render_template('comp_form.html', players=players, latest_gw=latest_gw, season_started= season_started)
@@ -218,7 +218,7 @@ def my_players():
     season_started = True
     fpl_json = requests.get('https://fantasy.premierleague.com/api/bootstrap-static/').json()
     events_df = pd.DataFrame(fpl_json['events'])
-    if math.isnan(events_df.iloc[0].most_captained) == True:
+    if events_df.iloc[0].most_captained is None:
         season_started = False
     latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
 
