@@ -19,6 +19,11 @@ url = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 r = requests.get(url)
 json = r.json()
 
+
+
+
+
+
 elements_df = pd.DataFrame(json['elements'])
 elements_types_df = pd.DataFrame(json['element_types'])
 teams_df = pd.DataFrame(json['teams'])
@@ -158,9 +163,31 @@ teams_2122.to_sql(name='team2122',con=db.engine, index=False, if_exists='replace
     'name': Text
 }) """
 
+#COMMENT OUT AFTER FIRST RUN 
+teams_2223 = teams_df[['id','name']]
+
+teams_2223.to_sql(name='team2223',con=db.engine, index=False, if_exists='replace',dtype={
+    'id': Integer,
+    'name': Text
+}) 
+
+
 con = sqlalchemy.create_engine(uri, encoding='utf8')
+## removing the foreign key constraints after the tables already exist so that they can be dropped and replaced
 con.execute('alter table record drop constraint teamer')
 con.execute('alter table record drop constraint player_connect')
+
+### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
+
+con.execute('create table 21_22teams like teams_2122')
+con.execute('insert into 21_22teams select * from teams_2122')
+
+con.execute('create table 21_22player like player')
+con.execute('insert into 21_22player select * from player')
+
+con.execute('create table 21_22record like record')
+con.execute('insert into 21_22record select * from record')
+
 
 
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
@@ -218,6 +245,9 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 
 con.execute('alter table player add primary key(id)')
 #con.execute('alter table team2122 add primary key(id)')
+## Comment out after first run
+con.execute('alter table team2223 add primary key(id)')
+
 con.execute('alter table record add primary key(id)')
-con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2122(id)')
+con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2223(id)')
 con.execute('alter table record add constraint player_connect foreign key (element) references player(id)')
