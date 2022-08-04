@@ -121,6 +121,7 @@ def all_players():
     if events_df.iloc[0].most_captained is None:
         season_started = False
         latest_gw = 38
+        show_last = 0
     else:
         latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
         show_last = request.form.get('week_filter')
