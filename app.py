@@ -120,8 +120,10 @@ def all_players():
     events_df = pd.DataFrame(fpl_json['events'])
     if events_df.iloc[0].most_captained is None:
         season_started = False
-    latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
-    show_last = request.form.get('week_filter')
+        latest_gw = 38
+    else:
+        latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
+        show_last = request.form.get('week_filter')
 
     if show_last== 'a':
         minutes_threshold = 90
@@ -150,7 +152,9 @@ def player_comparison():
     events_df = pd.DataFrame(fpl_json['events'])
     if events_df.iloc[0].most_captained is None:
         season_started = False
-    latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
+        latest_gw = 38
+    else:
+        latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     
 
     maxwk = int(request.form.get('maxwk'))
@@ -189,7 +193,9 @@ def comp_form():
     events_df = pd.DataFrame(fpl_json['events'])
     if events_df.iloc[0].most_captained is None:
         season_started = False
-    latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
+        latest_gw = 38 
+    else:
+        latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
     return render_template('comp_form.html', players=players, latest_gw=latest_gw, season_started= season_started)
 
 @app.route('/regret')
@@ -220,7 +226,9 @@ def my_players():
     events_df = pd.DataFrame(fpl_json['events'])
     if events_df.iloc[0].most_captained is None:
         season_started = False
-    latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
+        latest_gw =38
+    else:
+        latest_gw = events_df.dropna(subset=['most_captained']).iloc[-1].id
 
     if request.method== 'POST':
         team_id = request.form.get('team_id')
