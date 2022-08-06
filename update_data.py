@@ -174,8 +174,10 @@ teams_2223.to_sql(name='team2223',con=db.engine, index=False, if_exists='replace
 
 con = sqlalchemy.create_engine(uri, encoding='utf8')
 ## removing the foreign key constraints after the tables already exist so that they can be dropped and replaced
-con.execute('alter table record drop constraint teamer')
-con.execute('alter table record drop constraint player_connect')
+
+## COMMENT THIS BACK IN AFTER FIRST RUN 
+#con.execute('alter table record drop constraint teamer')
+#con.execute('alter table record drop constraint player_connect')
 
 ### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
 
