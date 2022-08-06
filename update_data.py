@@ -179,14 +179,14 @@ con.execute('alter table record drop constraint player_connect')
 
 ### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
 
-con.execute('create table 21_22teams like teams_2122')
-con.execute('insert into 21_22teams select * from teams_2122')
+con.execute('create table a_teams_2122 like teams_2122')
+con.execute('insert into a_teams_2122 select * from teams_2122')
 
-con.execute('create table 21_22player like player')
-con.execute('insert into 21_22player select * from player')
+con.execute('create table a_player_2122 like player')
+con.execute('insert into a_player_2122 select * from player')
 
-con.execute('create table 21_22record like record')
-con.execute('insert into 21_22record select * from record')
+con.execute('create table a_record_2122 like record')
+con.execute('insert into a_record_2122 select * from record')
 
 
 
