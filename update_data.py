@@ -181,14 +181,9 @@ con = sqlalchemy.create_engine(uri, encoding='utf8')
 
 ### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
 
-con.execute('create table a_team_2122 like team_2122')
-con.execute('insert into a_team_2122 select * from team_2122')
+con.execute('create table a_player_2122 AS TABLE player')
 
-con.execute('create table a_player_2122 like player')
-con.execute('insert into a_player_2122 select * from player')
-
-con.execute('create table a_record_2122 like record')
-con.execute('insert into a_record_2122 select * from record')
+con.execute('create table a_record_2122 AS TABLE record')
 
 
 
