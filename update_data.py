@@ -181,8 +181,8 @@ con = sqlalchemy.create_engine(uri, encoding='utf8')
 
 ### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
 
-con.execute('create table a_teams_2122 like teams_2122')
-con.execute('insert into a_teams_2122 select * from teams_2122')
+con.execute('create table a_team_2122 like team_2122')
+con.execute('insert into a_team_2122 select * from team_2122')
 
 con.execute('create table a_player_2122 like player')
 con.execute('insert into a_player_2122 select * from player')
@@ -246,10 +246,18 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
 })
 
 con.execute('alter table player add primary key(id)')
+
 #con.execute('alter table team2122 add primary key(id)')
+
 ## Comment out after first run
 con.execute('alter table team2223 add primary key(id)')
 
 con.execute('alter table record add primary key(id)')
 con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2223(id)')
 con.execute('alter table record add constraint player_connect foreign key (element) references player(id)')
+
+## for future years 
+##create new teams table and then comment out after first run
+## comment out the 'drop constraints' until after the first run, then comment them in'
+## comment out the code that saves the last season's tables to the archive
+## comment out team table adding primary key after first run 
