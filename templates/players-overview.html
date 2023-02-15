@@ -73,10 +73,12 @@
             <th scope="col">Name</th>
             <th scope="col">Team</th>
             <th scope="col">Position</th>
+            <th scope="col">xG</th>
+            <th scope="col">xA</th>
+            <th scope="col">xGI</th>
             <th scope="col">Total Points</th>
             <th scope="col">Minutes</th>
             <th scope="col">Price</th>
-            <th scope="col">Points per game</th>
             <th scope="col">Points per million</th>
             <th scope="col">Points per 90</th>
             <th scope="col">VPM90</th>
@@ -94,37 +96,45 @@
             <td>{{player.position}}</td>
         
         {% if show_last == 'a' %} 
+        <td>{{player.xg3}}</td>
+        <td>{{player.xa3}}</td>
+        <td>{{player.xgi3}}</td>
         <td>{{player.pts3}}</td>
         <td>{{player.min3}}</td>
         <td>{{player.now_cost}}</td>
-        <td>{{player.ppg3}}</td>
         <td>{{player.ppm3}}</td>
         <td>{{player.pp90_3}}</td>
         <td>{{player.vpm90_3}}</td>
 
         {% elif show_last == 'b' %} 
+        <td>{{player.xg6}}</td>
+        <td>{{player.xa6}}</td>
+        <td>{{player.xgi6}}</td>
         <td>{{player.pts6}}</td>
         <td>{{player.min6}}</td>
         <td>{{player.now_cost}}</td>
-        <td>{{player.ppg6}}</td>
         <td>{{player.ppm6}}</td>
         <td>{{player.pp90_6}}</td>
         <td>{{player.vpm90_6}}</td>
 
         {% elif show_last == 'c' %} 
+        <td>{{player.xg10}}</td>
+        <td>{{player.xa10}}</td>
+        <td>{{player.xgi10}}</td>
         <td>{{player.pts10}}</td>
         <td>{{player.min10}}</td>
         <td>{{player.now_cost}}</td>
-        <td>{{player.ppg10}}</td>
         <td>{{player.ppm10}}</td>
         <td>{{player.pp90_10}}</td>
         <td>{{player.vpm90_10}}</td>
 
         {% else %}
+        <td>{{player.expected_goals}}</td>
+        <td>{{player.expected_assists}}</td>
+        <td>{{player.expected_goal_involvement}}</td>
         <td>{{player.total_points}}</td>
         <td>{{player.minutes}}</td>
         <td>{{player.now_cost}}</td>
-        <td>{{player.points_per_game}}</td>
         <td>{{player.points_per_mil}}</td>
         <td>{{player.points_per_90}}</td>
         <td>{{player.VPM90}}</td>

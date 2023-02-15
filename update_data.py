@@ -28,11 +28,12 @@ elements_df = pd.DataFrame(json['elements'])
 elements_types_df = pd.DataFrame(json['element_types'])
 teams_df = pd.DataFrame(json['teams'])
 
-player_overview_df = elements_df[['id','first_name','second_name','team','element_type','points_per_game','total_points','minutes','now_cost']]
+player_overview_df = elements_df[['id','first_name','second_name','team','element_type','points_per_game','total_points','minutes','now_cost', 'expected_goals','expected_assists','expected_goal_involvements']]
 player_overview_df['position'] = player_overview_df.element_type.map(elements_types_df.set_index('id').singular_name_short)
 player_overview_df['team'] = player_overview_df.team.map(teams_df.set_index('id').name)
 player_overview_df['now_cost']=player_overview_df['now_cost']/10
-
+player_overview_df[['expected_goals','expected_assists','expected_goal_involvements']] = player_overview_df[['expected_goals','expected_assists','expected_goal_involvements']].apply(
+    lambda x: float(x))
 
 player_overview_df['points_per_90']= (player_overview_df['total_points']*90/player_overview_df['minutes']).round(decimals=1)
 player_overview_df['points_per_mil'] = (player_overview_df['total_points']/player_overview_df['now_cost']).round(decimals=1)
@@ -40,7 +41,7 @@ player_overview_df['points_per_mil'] = (player_overview_df['total_points']/playe
 ##rearranging columns for readability
 player_overview_df = player_overview_df.drop(['element_type'], axis=1)
 column_names = ['id','first_name','second_name','team','position','points_per_game','total_points','minutes','now_cost',
-            'points_per_90','points_per_mil']
+            'points_per_90','points_per_mil','expected_goals','expected_assists','expected_goal_involvements']
 player_overview_df = player_overview_df.reindex(columns=column_names)
 
 def calculate_vpm90(df):
@@ -97,9 +98,9 @@ def calculate_vpm90(df):
 players_who_played = elements_df.loc[elements_df.minutes>0]
 player_records_df = pd.DataFrame()
 latest_vpm90_df = pd.DataFrame()
-last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3','pts3','min3'])
-last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6','pts6','min6'])
-last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10','pts10','min10'])
+last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3','pts3','min3', 'xg3','xa3','xgi3'])
+last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6','pts6','min6','xg6','xa6','xgi6'])
+last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10','pts10','min10','xg10','xa10','xgi10'])
 
 for i in players_who_played.id:
     url = 'https://fantasy.premierleague.com/api/element-summary/{playerid}/'.format(playerid = i)
@@ -128,7 +129,11 @@ for i in players_who_played.id:
         p_element = last_x['element'].iloc[0]
         min_x = last_x['minutes'].sum()
         pts_x = last_x['total_points'].sum()
-        dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x, f'pts{n}':pts_x, f'min{n}': min_x}
+        xg_x = last_x['expected_goals'].sum()
+        xa_x = last_x['expected_assists'].sum()
+        xgi_x = last_x['expected_goal_involvement'].sum()
+        dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
+         f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
         final_df = df.append(dfx_to_add,ignore_index=True)
         
         return final_df
@@ -143,7 +148,8 @@ for i in players_who_played.id:
 
     player_df['first_name'] = player_df.element.map(elements_df.set_index('id').first_name)
     player_df['second_name'] = player_df.element.map(elements_df.set_index('id').second_name)
-    focused_df = player_df[['first_name', 'second_name','element', 'fixture', 'opponent_team', 'total_points', 'was_home', 'kickoff_time', 'round', 'minutes','goals_scored', 'assists','value','VPM90']]
+    focused_df = player_df[['first_name', 'second_name','element', 'fixture', 'opponent_team', 'total_points', 'was_home', 'kickoff_time', 'round', 'minutes','goals_scored', 'assists','value','VPM90', 
+    'expected_goals','expected_assists','expected_goal_involvements']]
     player_records_df = player_records_df.append(focused_df,ignore_index=True)
     
 ## creating id for primary key
@@ -201,24 +207,36 @@ player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='
     'points_per_mil': Float,
     'element': Integer,
     'VPM90': Float,
+    'expected_goals': Float,
+    'expected_assists': Float,
+    'expected_goal_involvements': Float,
     'ppg3': Float,
     'ppm3': Float,
     'pp90_3': Float,
     'vpm90_3': Float,
     'pts3': Integer,
     'min3': Integer,
+    'xg3': Float,
+    'xa3': Float,
+    'xgi3': Float,
     'ppg6': Float,
     'ppm6': Float,
     'pp90_6': Float,
     'vpm90_6': Float,
     'pts6': Integer,
     'min6': Integer,
+    'xg6': Float,
+    'xa6': Float,
+    'xgi6': Float,
     'ppg10': Float,
     'ppm10': Float,
     'pp90_10': Float,
     'vpm90_10': Float,
     'pts10': Integer,
-    'min10': Integer
+    'min10': Integer,
+    'xg10': Float,
+    'xa10': Float,
+    'xgi10': Float
 })
 
 player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='replace', dtype={
@@ -236,7 +254,10 @@ player_records_df.to_sql(name = 'record',con=db.engine, index=False,if_exists='r
     'goals_scored': Integer, 
     'assists': Integer,
     'value': Float,
-    'VPM90': Float
+    'VPM90': Float,
+    'expected_goals': Float,
+    'expected_assists': Float,
+    'expected_goal_involvements': Float
 
 })
 
