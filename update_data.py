@@ -32,8 +32,9 @@ player_overview_df = elements_df[['id','first_name','second_name','team','elemen
 player_overview_df['position'] = player_overview_df.element_type.map(elements_types_df.set_index('id').singular_name_short)
 player_overview_df['team'] = player_overview_df.team.map(teams_df.set_index('id').name)
 player_overview_df['now_cost']=player_overview_df['now_cost']/10
-player_overview_df[['expected_goals','expected_assists','expected_goal_involvements']] = player_overview_df[['expected_goals','expected_assists','expected_goal_involvements']].apply(
-    lambda x: float(x))
+player_overview_df['expected_goals'] = player_overview_df['expected_goals'].apply(lambda x: float(x))
+player_overview_df['expected_assists'] = player_overview_df['expected_assists'].apply(lambda x: float(x))
+player_overview_df['expected_goal_involvements'] = player_overview_df['expected_goal_involvements'].apply(lambda x: float(x))
 
 player_overview_df['points_per_90']= (player_overview_df['total_points']*90/player_overview_df['minutes']).round(decimals=1)
 player_overview_df['points_per_mil'] = (player_overview_df['total_points']/player_overview_df['now_cost']).round(decimals=1)
@@ -131,7 +132,7 @@ for i in players_who_played.id:
         pts_x = last_x['total_points'].sum()
         xg_x = last_x['expected_goals'].sum()
         xa_x = last_x['expected_assists'].sum()
-        xgi_x = last_x['expected_goal_involvement'].sum()
+        xgi_x = last_x['expected_goal_involvements'].sum()
         dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
          f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
         final_df = df.append(dfx_to_add,ignore_index=True)
