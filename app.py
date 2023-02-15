@@ -54,7 +54,7 @@ class Player(Base):
     VPM90 = Column(Float)
     expected_goals = Column(Float)
     expected_assists = Column(Float)
-    expected_goal_involvement = Column(Float)
+    expected_goal_involvements = Column(Float)
     ppg3= Column(Float)
     ppm3= Column(Float)
     pp90_3= Column(Float)
@@ -113,7 +113,7 @@ class Record(Base):
     VPM90 = Column(Float)
     expected_goals = Column(Float)
     expected_assists = Column(Float)
-    expected_goal_involvement = Column(Float)
+    expected_goal_involvements = Column(Float)
    
 
 def create_tables():

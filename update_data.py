@@ -32,9 +32,9 @@ player_overview_df = elements_df[['id','first_name','second_name','team','elemen
 player_overview_df['position'] = player_overview_df.element_type.map(elements_types_df.set_index('id').singular_name_short)
 player_overview_df['team'] = player_overview_df.team.map(teams_df.set_index('id').name)
 player_overview_df['now_cost']=player_overview_df['now_cost']/10
-player_overview_df['expected_goals'] = player_overview_df['expected_goals'].apply(lambda x: float(x))
-player_overview_df['expected_assists'] = player_overview_df['expected_assists'].apply(lambda x: float(x))
-player_overview_df['expected_goal_involvements'] = player_overview_df['expected_goal_involvements'].apply(lambda x: float(x))
+player_overview_df['expected_goals'] = player_overview_df['expected_goals'].apply(lambda x: float(x)).round(decimals=2)
+player_overview_df['expected_assists'] = player_overview_df['expected_assists'].apply(lambda x: float(x)).round(decimals=2)
+player_overview_df['expected_goal_involvements'] = player_overview_df['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=2)
 
 player_overview_df['points_per_90']= (player_overview_df['total_points']*90/player_overview_df['minutes']).round(decimals=1)
 player_overview_df['points_per_mil'] = (player_overview_df['total_points']/player_overview_df['now_cost']).round(decimals=1)
@@ -116,8 +116,13 @@ for i in players_who_played.id:
 
     def last_x_stats(n,df,pl_df):
 
-        last_x = pl_df[['element','total_points','minutes','value']].tail(n).reset_index()
+        last_x = pl_df[['element','total_points','minutes','value', 'expected_goals',
+        'expected_assists','expected_goal_involvements']].tail(n).reset_index()
+
         last_x[f'VPM90_{n}'] = calculate_vpm90(last_x)
+        last_x['expected_goals'] = last_x['expected_goals'].apply(lambda x: float(x)).round(decimals=2)
+        last_x['expected_assists'] = last_x['expected_assists'].apply(lambda x: float(x)).round(decimals=2)
+        last_x['expected_goal_involvements'] = last_x['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=2)
         vpm90_x = round(last_x[f'VPM90_{n}'].iloc[-1],1)
         if last_x['minutes'].sum() == 0:
             ppgx = 0
@@ -171,7 +176,7 @@ teams_2122.to_sql(name='team2122',con=db.engine, index=False, if_exists='replace
 }) """
 
 #COMMENT OUT AFTER FIRST RUN 
-""" teams_2223 = teams_df[['id','name']]
+"""teams_2223 = teams_df[['id','name']]
 
 teams_2223.to_sql(name='team2223',con=db.engine, index=False, if_exists='replace',dtype={
     'id': Integer,
