@@ -34,7 +34,7 @@ player_overview_df['team'] = player_overview_df.team.map(teams_df.set_index('id'
 player_overview_df['now_cost']=player_overview_df['now_cost']/10
 player_overview_df['expected_goals'] = player_overview_df['expected_goals'].apply(lambda x: float(x)).round(decimals=2)
 player_overview_df['expected_assists'] = player_overview_df['expected_assists'].apply(lambda x: float(x)).round(decimals=2)
-player_overview_df['expected_goal_involvements'] = player_overview_df['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=2)
+player_overview_df['expected_goal_involvements'] = player_overview_df['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=1)
 
 player_overview_df['points_per_90']= (player_overview_df['total_points']*90/player_overview_df['minutes']).round(decimals=1)
 player_overview_df['points_per_mil'] = (player_overview_df['total_points']/player_overview_df['now_cost']).round(decimals=1)
@@ -122,7 +122,7 @@ for i in players_who_played.id:
         last_x[f'VPM90_{n}'] = calculate_vpm90(last_x)
         last_x['expected_goals'] = last_x['expected_goals'].apply(lambda x: float(x)).round(decimals=2)
         last_x['expected_assists'] = last_x['expected_assists'].apply(lambda x: float(x)).round(decimals=2)
-        last_x['expected_goal_involvements'] = last_x['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=2)
+        last_x['expected_goal_involvements'] = last_x['expected_goal_involvements'].apply(lambda x: float(x)).round(decimals=1)
         vpm90_x = round(last_x[f'VPM90_{n}'].iloc[-1],1)
         if last_x['minutes'].sum() == 0:
             ppgx = 0
