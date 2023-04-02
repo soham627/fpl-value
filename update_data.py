@@ -135,9 +135,9 @@ for i in players_who_played.id:
         p_element = last_x['element'].iloc[0]
         min_x = last_x['minutes'].sum()
         pts_x = last_x['total_points'].sum()
-        xg_x = last_x['expected_goals'].sum()
-        xa_x = last_x['expected_assists'].sum()
-        xgi_x = last_x['expected_goal_involvements'].sum()
+        xg_x = last_x['expected_goals'].sum().round(decimals=2)
+        xa_x = last_x['expected_assists'].sum().round(decimals=2)
+        xgi_x = last_x['expected_goal_involvements'].sum().round(decimals=1)
         dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
          f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
         final_df = df.append(dfx_to_add,ignore_index=True)
