@@ -111,7 +111,7 @@ for i in players_who_played.id:
     player_df['value'] = player_df['value']/10
     player_df['VPM90']= calculate_vpm90(player_df)
     player_df['VPM90']= player_df['VPM90'].round(decimals=1)
-    latest_vpm90_df = latest_vpm90_df.append(player_df[['element','VPM90']].iloc[-1])
+    latest_vpm90_df = pd.concat([latest_vpm90_df,player_df[['element','VPM90']].iloc[-1]])
     
 
     def last_x_stats(n,df,pl_df):
@@ -140,7 +140,7 @@ for i in players_who_played.id:
         xgi_x = last_x['expected_goal_involvements'].sum().round(decimals=1)
         dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
          f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
-        final_df = df.append(dfx_to_add,ignore_index=True)
+        final_df = pd.concat([df,dfx_to_add],ignore_index=True)
         
         return final_df
     
@@ -156,7 +156,7 @@ for i in players_who_played.id:
     player_df['second_name'] = player_df.element.map(elements_df.set_index('id').second_name)
     focused_df = player_df[['first_name', 'second_name','element', 'fixture', 'opponent_team', 'total_points', 'was_home', 'kickoff_time', 'round', 'minutes','goals_scored', 'assists','value','VPM90', 
     'expected_goals','expected_assists','expected_goal_involvements']]
-    player_records_df = player_records_df.append(focused_df,ignore_index=True)
+    player_records_df = pd.concat([player_records_df,focused_df],ignore_index=True)
     
 ## creating id for primary key
 player_records_df['id'] = player_records_df.index+1
