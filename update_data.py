@@ -183,13 +183,21 @@ teams_2223.to_sql(name='team2223',con=db.engine, index=False, if_exists='replace
     'name': Text
 }) """
 
+#COMMENT OUT AFTER FIRST RUN 
+teams_2324 = teams_df[['id','name']]
+
+teams_2324.to_sql(name='team2324',con=db.engine, index=False, if_exists='replace',dtype={
+    'id': Integer,
+    'name': Text
+}) 
+
 
 con = sqlalchemy.create_engine(uri, encoding='utf8')
 ## removing the foreign key constraints after the tables already exist so that they can be dropped and replaced
 
 ## COMMENT THIS BACK IN AFTER FIRST RUN 
-con.execute('alter table record drop constraint teamer')
-con.execute('alter table record drop constraint player_connect')
+#con.execute('alter table record drop constraint teamer')
+#con.execute('alter table record drop constraint player_connect')
 
 ### saving tables from 21-22 season - COMMENT THIS OUT AFTER FIRST RUN
 
@@ -197,6 +205,10 @@ con.execute('alter table record drop constraint player_connect')
 
 #con.execute('create table a_record_2122 AS TABLE record')
 
+### saving tables from 22-23 season - COMMENT THIS OUT AFTER FIRST RUN
+con.execute('create table a_player_2223 AS TABLE player')
+
+con.execute('create table a_record_2223 AS TABLE record')
 
 
 player_overview_df.to_sql(name='player', con=db.engine, index=False, if_exists='replace', dtype={
@@ -273,9 +285,12 @@ con.execute('alter table player add primary key(id)')
 ## Comment out after first run
 #con.execute('alter table team2122 add primary key(id)')
 #con.execute('alter table team2223 add primary key(id)')
+con.execute('alter table team2324 add primary key(id)')
+
 
 con.execute('alter table record add primary key(id)')
-con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2223(id)')
+#Change the reference year here before the new season
+con.execute('alter table record add constraint teamer foreign key (opponent_team) references team2324(id)')
 con.execute('alter table record add constraint player_connect foreign key (element) references player(id)')
 
 ## for future years 
