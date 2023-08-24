@@ -140,6 +140,7 @@ for i in players_who_played.id:
         xgi_x = last_x['expected_goal_involvements'].sum().round(decimals=1)
         dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
          f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
+        dfx_to_add = pd.DataFrame([dfx_to_add])
         final_df = pd.concat([df,dfx_to_add],ignore_index=True)
         
         return final_df
