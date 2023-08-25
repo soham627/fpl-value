@@ -98,7 +98,7 @@ def calculate_vpm90(df):
 
 players_who_played = elements_df.loc[elements_df.minutes>0]
 player_records_df = pd.DataFrame()
-latest_vpm90_df = pd.DataFrame()
+latest_vpm90_df = pd.DataFrame(columns=['element','VPM90'])
 last_3_df= pd.DataFrame(columns=['element_3','ppg3','ppm3','pp90_3','vpm90_3','pts3','min3', 'xg3','xa3','xgi3'])
 last_6_df= pd.DataFrame(columns=['element_6','ppg6','ppm6','pp90_6','vpm90_6','pts6','min6','xg6','xa6','xgi6'])
 last_10_df= pd.DataFrame(columns=['element_10','ppg10','ppm10','pp90_10','vpm90_10','pts10','min10','xg10','xa10','xgi10'])
@@ -111,8 +111,7 @@ for i in players_who_played.id:
     player_df['value'] = player_df['value']/10
     player_df['VPM90']= calculate_vpm90(player_df)
     player_df['VPM90']= player_df['VPM90'].round(decimals=1)
-    latest_vpm90_df = pd.concat([latest_vpm90_df,player_df[['element','VPM90']].iloc[-1]])
-    
+    latest_vpm90_df.loc[len(latest_vpm90_df)] = {'element': player_df['element'].iloc[-1], 'VPM90': player_df['VPM90'].iloc[-1]}
 
     def last_x_stats(n,df,pl_df):
 
@@ -138,8 +137,8 @@ for i in players_who_played.id:
         xg_x = last_x['expected_goals'].sum().round(decimals=2)
         xa_x = last_x['expected_assists'].sum().round(decimals=2)
         xgi_x = last_x['expected_goal_involvements'].sum().round(decimals=1)
-        dfx_to_add = {f'element_{n}': p_element, f'ppg{n}': ppgx, f'ppm{n}': ppmx,f'pp90_{n}':pp90_x,f'vpm90_{n}':vpm90_x,
-         f'pts{n}':pts_x, f'min{n}': min_x, f'xg{n}': xg_x,f'xa{n}': xa_x,f'xgi{n}': xgi_x}
+        dfx_to_add = {f'element_{n}': [p_element], f'ppg{n}': [ppgx], f'ppm{n}': [ppmx],f'pp90_{n}':[pp90_x],f'vpm90_{n}':[vpm90_x],
+         f'pts{n}':[pts_x], f'min{n}': [min_x], f'xg{n}': [xg_x],f'xa{n}': [xa_x],f'xgi{n}': [xgi_x]}
         dfx_to_add = pd.DataFrame([dfx_to_add])
         final_df = pd.concat([df,dfx_to_add],ignore_index=True)
         
