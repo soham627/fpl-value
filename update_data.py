@@ -137,12 +137,9 @@ for i in players_who_played.id:
         xg_x = last_x['expected_goals'].sum().round(decimals=2)
         xa_x = last_x['expected_assists'].sum().round(decimals=2)
         xgi_x = last_x['expected_goal_involvements'].sum().round(decimals=1)
-        dfx_to_add = {f'element_{n}': [p_element], f'ppg{n}': [ppgx], f'ppm{n}': [ppmx],f'pp90_{n}':[pp90_x],f'vpm90_{n}':[vpm90_x],
-         f'pts{n}':[pts_x], f'min{n}': [min_x], f'xg{n}': [xg_x],f'xa{n}': [xa_x],f'xgi{n}': [xgi_x]}
-        dfx_to_add = pd.DataFrame([dfx_to_add])
-        final_df = pd.concat([df,dfx_to_add],ignore_index=True)
-        
-        return final_df
+        entry_to_add = [p_element, ppgx, ppmx, pp90_x, vpm90_x,pts_x, min_x, xg_x, xa_x,xgi_x]
+        df.loc[len(df)] = entry_to_add
+        return df
     
     last_3_df = last_x_stats(3,last_3_df,player_df)
     last_6_df = last_x_stats(6,last_6_df,player_df)
