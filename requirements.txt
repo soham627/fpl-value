@@ -46,4 +46,4 @@ tenacity==8.0.1
 traitlets==5.1.1
 urllib3>=1.26.18
 virtualenv==20.13.0
-Werkzeug==2.2.3
+werkzeug>=2.3.8
