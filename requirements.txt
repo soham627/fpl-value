@@ -37,7 +37,7 @@ pyparsing==3.0.6
 pyrsistent==0.18.0
 python-dateutil==2.8.2
 python-dotenv==0.19.2
-requests==2.27.1
+requests>=2.31.0
 scipy==1.10.0
 seaborn==0.11.2
 six==1.16.0
